@@ -13,24 +13,11 @@ public class ItemPress : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	{
 		isPressed = true;
 		itemPressed = this.gameObject;
-		//itemPressed.GetComponent<RectTransform>().localScale = new Vector3(1.25f, 1.25f, 1.25f);
-        /*
-		itemPressed.GetComponent<Animator>().ResetTrigger("press_show");
-		itemPressed.GetComponent<Animator>().ResetTrigger("press_hide");
-		itemPressed.GetComponent<Animator>().SetTrigger("press_show");
-        */
-
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
 		isPressed = false;
-		//itemPressed.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
-        /*
-		itemPressed.GetComponent<Animator>().ResetTrigger("press_show");
-		itemPressed.GetComponent<Animator>().ResetTrigger("press_hide");
-		itemPressed.GetComponent<Animator>().SetTrigger("press_hide");
-        */
 	}
 
 }

@@ -57,7 +57,6 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		Debug.Log("End Drag");
 		if (itemBeingCollided != null)
 		{
 			if (isColliding == true)
@@ -79,7 +78,6 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	{
 		itemBeingCollided = collision2d.gameObject;
 		isColliding = true;
-		//isStillColliding = true;
 	}
 
 	void OnCollisionEnter2D(Collision2D collision2d)
@@ -96,41 +94,6 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		{
 			isSideColumn = false;
 		}
-
-		Debug.Log(itemBeingCollided);
-        /*
-		if (isSideColumn == false)
-		{
-			itemBeingCollidedFinal = itemBeingCollided;
-			spouses = comboData.GetComponent<Combinations>().getSpouses(itemBeingDragged);
-			spawns = comboData.GetComponent<Combinations>().getSpawn(itemBeingDragged);
-
-			if (isDragging == true)
-			{
-				//Debug.Log (itemBeingDragged + "collided with: " + collision2d.gameObject);
-				itemBeingCollidedFinal = itemBeingCollided;
-				//Debug.Log ("itemBeingCollided: " + itemBeingCollided);
-				itemBeingDragged.GetComponent<Animator>().SetTrigger("detect_show");
-				itemBeingCollided.GetComponent<Animator>().SetTrigger("detect_show");
-
-				for (int i = 0; i < spouses.Count; i++)
-				{
-					if (itemBeingCollided.name == spouses[i])
-					{
-						spawnName = spawns[i];
-						Debug.Log("Spouse Name: " + spouses[i]);
-
-						//Debug.Log ("Spawn Name: " + spawnName.name);
-						showPositive = true;
-						Debug.Log("showPositive: " + showPositive);
-					}
-				}
-			}
-		}
-        */
-		//Debug.Log("showPositive: " + showPositive);
-		Debug.Log (itemBeingDragged + "collided with: " + collision2d.gameObject);
-
 	}
 
 	void OnCollisionExit2D(Collision2D collision2d)
@@ -141,7 +104,6 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	void Update()
 	{
-
 		if (isDragging == true)
 		{
 			screenPoint = Input.mousePosition;
@@ -156,9 +118,5 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 			isDragging = false;
 			StickerScrollRect.GetComponent<ScrollRect>().enabled = true;
 		}
-
-		//Debug.Log(isDragging);
-
 	}
-
 }

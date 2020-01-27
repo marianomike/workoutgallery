@@ -14,7 +14,6 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 {
 	public GameObject StickerScrollRectBg;
 	public GameObject StickerThumbnailHolder;
-	private GameObject GameEngine;
 	public GameObject DragSticker = null;
 	public GameObject StickerPlaceArea = null;
 
@@ -102,7 +101,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		for (int i = 0; i < spriteTextures.Length; i++){
 			string newName = Path.GetFileName(spriteTextures[i].name);
 			if (newName == spriteTexture){
-				newItem.GetComponent<TemplateDragItem>().thumb.GetComponent<Image>().sprite = spriteTextures[i];
+				newItem.GetComponent<TemplateDragItem>().thumbImage.sprite = spriteTextures[i];
 			}
 		}
 #endif
@@ -117,13 +116,12 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 			Vector3 screenPoint = eventData.position;
 			screenPoint.z = 10.0f; //distance of the plane from the camera
 			newDragSticker.transform.position = Camera.main.ScreenToWorldPoint(screenPoint);
-			newDragSticker.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+			newDragSticker.GetComponent<RectTransform>().localScale = new Vector3(2f, 2f, 2f);
 			DragSticker = newDragSticker;
 		}
 
 		dragObjects.Add(newDragSticker);
 		return newDragSticker;
-
 	}
 
 	private void CreateSidebar()
@@ -151,7 +149,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		for (int i = 0; i < spriteTexturesHolder.Length; i++){
 			string newName = Path.GetFileName(spriteTexturesHolder[i].name);
 			if (newName == spriteTexture){
-				newSticker.GetComponent<TemplateStickerList>().thumbImage.GetComponent<Image>().sprite = spriteTexturesHolder[i];
+				newSticker.GetComponent<TemplateStickerList>().thumbImage.sprite = spriteTexturesHolder[i];
 			}
 		}
 #endif
@@ -176,6 +174,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
     void Update()
     {
 		bool isPressed = Input.GetMouseButton(0);
+
 		if (DragSticker != null)
 		{
 			bool hasDrag = DragSticker.GetComponent<DragHandler>().isDragging;

@@ -17,18 +17,26 @@ public class ItemListPress : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		isPressed = true;
-		stickerPressed = this.gameObject;
-		stickerName = stickerPressed.name;
-		//itemPressed.GetComponent<RectTransform>().localScale = new Vector3(1.25f, 1.25f, 1.25f);
-		stickersDataHolder = GameEngine.GetComponent<Setup>().stickersDataHolder;
+		StartCoroutine(startDragTimer(eventData));
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		StickerScrollRect.GetComponent<ScrollRect>().enabled = false;
+		// Debug.Log("On Pointer Up");
+		
 		isPressed = false;
-		//itemPressed.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+		StopAllCoroutines();
+		StickerScrollRect.GetComponent<ScrollRect>().enabled = true;
+	}
+
+	public IEnumerator startDragTimer(PointerEventData eventData)
+	{
+		Debug.Log ("coroutine called");
+		yield return new WaitForSeconds(0.1f);
+
+		isPressed = true;
+		stickerPressed = this.gameObject;
+		stickerName = stickerPressed.name;
 
 		for (int i = 0; i < stickersDataHolder.Length; i++)
 		{
@@ -39,12 +47,15 @@ public class ItemListPress : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		}
 
 		GameEngine.GetComponent<Setup>().CreateDragItem(stickerToDrag, stickerPressed, eventData);
+		StickerScrollRect.GetComponent<ScrollRect>().enabled = false;
 	}
+
 
 	void Start()
 	{
 		GameEngine = GameObject.Find("Engine");
 		StickerScrollRect = GameObject.Find("StickersScrollRect");
+		stickersDataHolder = GameEngine.GetComponent<Setup>().stickersDataHolder;
 	}
 
 	void Update()
