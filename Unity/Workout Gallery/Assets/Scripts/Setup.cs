@@ -84,7 +84,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		}
 	}
 
-	public GameObject CreateDragItem(Sticker sticker, GameObject pressSticker, PointerEventData eventData)
+	public GameObject CreateDragItem(Sticker sticker, GameObject pressSticker)
 	{
 
 		GameObject newDragSticker = Instantiate(Resources.Load(PATH_TEMPLATES + TEMPLATE_DRAG)) as GameObject;
@@ -98,19 +98,20 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 
 		// if making a prototype build load from the Resources folder
 #else
-		for (int i = 0; i < spriteTextures.Length; i++){
-			string newName = Path.GetFileName(spriteTextures[i].name);
+		for (int i = 0; i < spriteTexturesHolder.Length; i++){
+			string newName = Path.GetFileName(spriteTexturesHolder[i].name);
 			if (newName == spriteTexture){
-				newItem.GetComponent<TemplateDragItem>().thumbImage.sprite = spriteTextures[i];
+				newDragSticker.GetComponent<TemplateStickerDrag>().thumbImage.sprite = spriteTexturesHolder[i];
 			}
 		}
 #endif
 
-		newDragSticker.transform.SetParent(StickerPlaceArea.transform, true);
+		newDragSticker.transform.SetParent(StickerPlaceArea.transform, false);
 		newDragSticker.GetComponent<DragHandler>().itemBeingDragged = newDragSticker;
 
 		if (pressSticker != null)
 		{
+			/*
 			newDragSticker.GetComponent<DragHandler>().isDragging = true;
 			isDragging = true;
 			Vector3 screenPoint = eventData.position;
@@ -118,6 +119,9 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 			newDragSticker.transform.position = Camera.main.ScreenToWorldPoint(screenPoint);
 			newDragSticker.GetComponent<RectTransform>().localScale = new Vector3(2f, 2f, 2f);
 			DragSticker = newDragSticker;
+            */
+			newDragSticker.GetComponent<RectTransform>().localScale = new Vector3(2f, 2f, 2f);
+
 		}
 
 		dragObjects.Add(newDragSticker);

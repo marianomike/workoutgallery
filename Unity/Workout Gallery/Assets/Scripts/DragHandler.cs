@@ -25,6 +25,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	void Start()
 	{
+		gameObject.GetComponent<PinchZoom>().enabled = false;
 		GameEngine = GameObject.Find("Engine");
 		StickerPlaceArea = GameObject.Find("PhotoHolder");
 		StickerScrollRect = GameObject.Find("StickersScrollRect");
@@ -34,11 +35,13 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	{
 		pointerData = eventData;
 		isDragging = true;
+		gameObject.GetComponent<PinchZoom>().enabled = true;
 	}
 
 	public void OnPointerUp(PointerEventData data)
 	{
 		isDragging = false;
+		gameObject.GetComponent<PinchZoom>().enabled = false;
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
@@ -110,13 +113,13 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 			screenPoint.z = 10.0f; //distance of the plane from the camera
 			itemBeingDragged.transform.position = Camera.main.ScreenToWorldPoint(screenPoint);
 
-			StickerScrollRect.GetComponent<ScrollRect>().enabled = false;
-			StickerScrollRect.GetComponent<ScrollRect>().verticalNormalizedPosition = 1f;
+			//StickerScrollRect.GetComponent<ScrollRect>().enabled = false;
+			//StickerScrollRect.GetComponent<ScrollRect>().verticalNormalizedPosition = 1f;
 		}
 		else
 		{
 			isDragging = false;
-			StickerScrollRect.GetComponent<ScrollRect>().enabled = true;
+			//StickerScrollRect.GetComponent<ScrollRect>().enabled = true;
 		}
 	}
 }
