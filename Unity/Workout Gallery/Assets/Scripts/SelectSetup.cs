@@ -11,7 +11,7 @@ public class SelectSetup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PickImageButton.onClick.AddListener(() => ChooseImage(1024)); ;
+        PickImageButton.onClick.AddListener(() => ChooseImage(1024));
     }
 
     // Update is called once per frame

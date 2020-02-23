@@ -17,6 +17,9 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 	public GameObject DragSticker = null;
 	public GameObject StickerPlaceArea = null;
 
+	public Button PickImageButton;
+	public RawImage SelectedImage;
+
 	private float NewWidth;
 	private float NewHeight;
 
@@ -47,7 +50,29 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		StickerScrollRectBg.GetComponent<BoxCollider2D>().size = new Vector2(NewWidth, NewHeight);
 	}
 
-    // load the sprite textures
+	private void ChooseImage(int maxSize)
+	{
+		NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) =>
+		{
+			Debug.Log("Image path: " + path);
+			if (path != null)
+			{
+				// Create Texture from selected image
+				Texture2D texture = NativeGallery.LoadImageAtPath(path, maxSize);
+				if (texture == null)
+				{
+					Debug.Log("Couldn't load texture from " + path);
+					return;
+				}
+
+				SelectedImage.texture = texture;
+			}
+		}, "Select a PNG image", "image/png");
+
+		Debug.Log("Permission result: " + permission);
+	}
+
+	// load the sprite textures
 	private void LoadStickerSprites()
 	{
 		spriteLDataLoader = Resources.LoadAll(PATH_STICKER_TEXTURES, typeof(Sprite));
@@ -172,7 +197,8 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		LoadStickerSprites();
 		CreateSidebar();
 		SetScrollBgColliderSize();
-    }
+		PickImageButton.onClick.AddListener(() => ChooseImage(1024));
+	}
 
     // Update is called once per frame
     void Update()
