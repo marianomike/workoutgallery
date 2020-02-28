@@ -66,6 +66,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 				}
 
 				SelectedImage.texture = texture;
+				Utilities.SizeToParent(SelectedImage);
 			}
 		}, "Select a PNG image", "image/png");
 
