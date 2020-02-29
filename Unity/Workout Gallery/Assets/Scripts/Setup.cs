@@ -16,9 +16,14 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 	public GameObject StickerThumbnailHolder;
 	public GameObject DragSticker = null;
 	public GameObject StickerPlaceArea = null;
+	public GameObject ImageHolder;
+	public GameObject ButtonsHolder;
+	public Splash SplashScreen;
 
 	public Button PickImageButton;
+	public Button TakeImageButton;
 	public RawImage SelectedImage;
+	public Button DeleteImageButton;
 
 	private float NewWidth;
 	private float NewHeight;
@@ -65,10 +70,40 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 					return;
 				}
 
+				ImageHolder.SetActive(true);
 				SelectedImage.texture = texture;
+				ButtonsHolder.SetActive(false);
+				
 				Utilities.SizeToParent(SelectedImage);
+
 			}
 		}, "Select a PNG image", "image/png");
+
+		Debug.Log("Permission result: " + permission);
+	}
+
+	private void TakePicture(int maxSize)
+	{
+		NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
+		{
+			Debug.Log("Image path: " + path);
+			if (path != null)
+			{
+				// Create Texture from selected image
+				Texture2D texture = NativeGallery.LoadImageAtPath(path, maxSize);
+				if (texture == null)
+				{
+					Debug.Log("Couldn't load texture from " + path);
+					return;
+				}
+
+				ImageHolder.SetActive(true);
+				SelectedImage.texture = texture;
+				ButtonsHolder.SetActive(false);
+
+				Utilities.SizeToParent(SelectedImage);
+			}
+		}, maxSize);
 
 		Debug.Log("Permission result: " + permission);
 	}
@@ -190,15 +225,27 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		scrollItems.Add(sticker);
 	}
 
+    private void DeleteImage()
+    {
+		ImageHolder.SetActive(false);
+		SelectedImage.texture = null;
+		ButtonsHolder.SetActive(true);
+	}
+
 	// Start is called before the first frame update
 	void Start()
     {
-        scrollItems = new List<Sticker>();
+		SplashScreen.gameObject.SetActive(true);
+		scrollItems = new List<Sticker>();
+		ImageHolder.SetActive(false);
 		LoadStickerData();
 		LoadStickerSprites();
 		CreateSidebar();
 		SetScrollBgColliderSize();
 		PickImageButton.onClick.AddListener(() => ChooseImage(1024));
+		TakeImageButton.onClick.AddListener(() => TakePicture(1024));
+		DeleteImageButton.onClick.AddListener(DeleteImage);
+		SplashScreen.SplashIn();
 	}
 
     // Update is called once per frame
