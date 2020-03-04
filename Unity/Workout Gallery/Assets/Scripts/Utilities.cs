@@ -30,4 +30,20 @@ public static class Utilities
         imageTransform.sizeDelta = new Vector2(w, h);
         return imageTransform.sizeDelta;
     }
+
+    public static double ConvertToKilometers(float miles)
+    {
+        double kilometers;
+        kilometers = miles * 1.609;
+
+        return kilometers;
+    }
+
+    public static double ConvertToMiles(float kilometers)
+    {
+        double miles;
+        miles = kilometers / 1.609;
+
+        return miles;
+    }
 }

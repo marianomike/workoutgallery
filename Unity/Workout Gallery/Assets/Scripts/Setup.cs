@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Text;
 using System.IO;
+using TMPro;
 using UnityEngine.EventSystems;
 
 #if UNITY_EDITOR
@@ -12,6 +13,11 @@ using UnityEditor;
 
 public class Setup : MonoBehaviour, IPointerDownHandler
 {
+	private float distance;
+	private int hours;
+	private int minutes;
+	private int seconds;
+
 	public GameObject StickerScrollRectBg;
 	public GameObject StickerThumbnailHolder;
 	public GameObject DragSticker = null;
@@ -24,6 +30,8 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 	public Button TakeImageButton;
 	public RawImage SelectedImage;
 	public Button DeleteImageButton;
+	public TMP_InputField DistanceInput;
+	public TMP_Dropdown DistanceDropdown;
 
 	private float NewWidth;
 	private float NewHeight;
@@ -232,6 +240,34 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		ButtonsHolder.SetActive(true);
 	}
 
+    private void SetDistance(TMP_InputField input)
+    {
+		Debug.Log(DistanceInput.text);
+		distance = float.Parse(DistanceInput.text);
+		//Debug.Log(Utilities.ConvertToKilometers(distance));
+    }
+
+    private void CovertDistance(TMP_Dropdown dropdown)
+    {
+        if(dropdown.value == 0)
+        {
+			distance = (float)Utilities.ConvertToMiles(distance);
+        }
+        else
+        {
+			distance = (float)Utilities.ConvertToKilometers(distance);
+		}
+		Debug.Log(distance);
+        if(distance.ToString().Length > 1)
+        {
+			DistanceInput.text = distance.ToString(("F2"));
+        }
+        else
+        {
+			DistanceInput.text = distance.ToString();
+		}
+    }
+
 	// Start is called before the first frame update
 	void Start()
     {
@@ -244,6 +280,8 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		SetScrollBgColliderSize();
 		PickImageButton.onClick.AddListener(() => ChooseImage(1024));
 		TakeImageButton.onClick.AddListener(() => TakePicture(1024));
+		DistanceDropdown.onValueChanged.AddListener(delegate { CovertDistance(DistanceDropdown); });
+		DistanceInput.onEndEdit.AddListener(delegate { SetDistance(DistanceInput); });
 		DeleteImageButton.onClick.AddListener(DeleteImage);
 		SplashScreen.SplashIn();
 	}
