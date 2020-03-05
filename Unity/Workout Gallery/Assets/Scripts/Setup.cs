@@ -13,10 +13,15 @@ using UnityEditor;
 
 public class Setup : MonoBehaviour, IPointerDownHandler
 {
-	private float distance;
-	private int hours;
-	private int minutes;
-	private int seconds;
+    // store stats here
+	private float distance = 0;
+	private int hours = 0;
+	private int minutes = 0;
+	private int seconds = 0;
+	private string pace;
+
+    // combines hours + minutes + seconds entered into total seconds
+	private float TotalSeconds;
 
 	public GameObject StickerScrollRectBg;
 	public GameObject StickerThumbnailHolder;
@@ -30,8 +35,13 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 	public Button TakeImageButton;
 	public RawImage SelectedImage;
 	public Button DeleteImageButton;
+
 	public TMP_InputField DistanceInput;
 	public TMP_Dropdown DistanceDropdown;
+	public TMP_InputField HoursInput;
+	public TMP_InputField MinutesInput;
+	public TMP_InputField SecondsInput;
+	public TMP_Text PaceText;
 
 	private float NewWidth;
 	private float NewHeight;
@@ -242,12 +252,42 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 
     private void SetDistance(TMP_InputField input)
     {
-		Debug.Log(DistanceInput.text);
-		distance = float.Parse(DistanceInput.text);
-		//Debug.Log(Utilities.ConvertToKilometers(distance));
-    }
+		distance = float.Parse(input.text);
+		CalculateTotalSeconds();
+	}
 
-    private void CovertDistance(TMP_Dropdown dropdown)
+    private void SetHours(TMP_InputField input)
+    {
+		hours = System.Convert.ToInt32(input.text);
+		CalculateTotalSeconds();
+	}
+
+	private void SetMinutes(TMP_InputField input)
+	{
+		minutes = System.Convert.ToInt32(input.text);
+		CalculateTotalSeconds();
+	}
+
+	private void SetSeconds(TMP_InputField input)
+	{
+		seconds = System.Convert.ToInt32(input.text);
+		CalculateTotalSeconds();
+	}
+
+    private void CalculateTotalSeconds()
+    {
+		TotalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+        if(distance != 0)
+        {
+			float CalculatedPace = TotalSeconds / distance;
+
+			pace = Utilities.FormatTime(CalculatedPace);
+			PaceText.text = pace;
+		}
+	}
+
+	private void CovertDistance(TMP_Dropdown dropdown)
     {
         if(dropdown.value == 0)
         {
@@ -257,7 +297,9 @@ public class Setup : MonoBehaviour, IPointerDownHandler
         {
 			distance = (float)Utilities.ConvertToKilometers(distance);
 		}
-		Debug.Log(distance);
+
+        Debug.Log(distance);
+
         if(distance.ToString().Length > 1)
         {
 			DistanceInput.text = distance.ToString(("F2"));
@@ -266,7 +308,8 @@ public class Setup : MonoBehaviour, IPointerDownHandler
         {
 			DistanceInput.text = distance.ToString();
 		}
-    }
+		CalculateTotalSeconds();
+	}
 
 	// Start is called before the first frame update
 	void Start()
@@ -280,8 +323,13 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 		SetScrollBgColliderSize();
 		PickImageButton.onClick.AddListener(() => ChooseImage(1024));
 		TakeImageButton.onClick.AddListener(() => TakePicture(1024));
+
 		DistanceDropdown.onValueChanged.AddListener(delegate { CovertDistance(DistanceDropdown); });
-		DistanceInput.onEndEdit.AddListener(delegate { SetDistance(DistanceInput); });
+		DistanceInput.onValueChanged.AddListener(delegate { SetDistance(DistanceInput); });
+		HoursInput.onValueChanged.AddListener(delegate { SetHours(HoursInput); });
+		MinutesInput.onValueChanged.AddListener(delegate { SetMinutes(MinutesInput); });
+		SecondsInput.onValueChanged.AddListener(delegate { SetSeconds(SecondsInput); });
+
 		DeleteImageButton.onClick.AddListener(DeleteImage);
 		SplashScreen.SplashIn();
 	}
@@ -303,6 +351,8 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 				//DragItem.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
 			}
 		}
+
+		//CalculateTotalSeconds();
 	}
 
     public void OnPointerDown(PointerEventData eventData)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,5 +46,13 @@ public static class Utilities
         miles = kilometers / 1.609;
 
         return miles;
+    }
+
+    public static string FormatTime(float time)
+    {
+        TimeSpan timeSpan = TimeSpan.FromSeconds(time);
+        string timeText = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+
+        return timeText;
     }
 }
