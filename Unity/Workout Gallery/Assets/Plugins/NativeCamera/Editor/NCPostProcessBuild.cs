@@ -10,8 +10,8 @@ public class NCPostProcessBuild
 {
 	private const bool ENABLED = true;
 
-	private const string CAMERA_USAGE_DESCRIPTION = "Uses camera to take pictures";
-	private const string MICROPHONE_USAGE_DESCRIPTION = "Uses microphone to record audio in videos";
+	private const string CAMERA_USAGE_DESCRIPTION = "Capture media with camera";
+	private const string MICROPHONE_USAGE_DESCRIPTION = "Capture microphone input in videos";
 
 	[InitializeOnLoadMethod]
 	public static void ValidatePlugin()

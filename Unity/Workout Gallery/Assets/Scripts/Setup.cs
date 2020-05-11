@@ -13,6 +13,10 @@ using UnityEditor;
 
 public class Setup : MonoBehaviour, IPointerDownHandler
 {
+	// variables used for progression
+	private bool photoIsLoaded = false;
+	private bool distanceIsEntered = false;
+
     // store stats here
 	private float distance = 0;
 	private int hours = 0;
@@ -35,6 +39,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 	public Button TakeImageButton;
 	public RawImage SelectedImage;
 	public Button DeleteImageButton;
+	public Button CustomizeButton;
 
 	public TMP_InputField DistanceInput;
 	public TMP_Dropdown DistanceDropdown;
@@ -42,6 +47,11 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 	public TMP_InputField MinutesInput;
 	public TMP_InputField SecondsInput;
 	public TMP_Text PaceText;
+
+    // Stats Layout 1
+    public TMP_Text DistanceDisplay1;
+	public TMP_Text TimeDisplay1;
+	public TMP_Text PaceDisplay1;
 
 	private float NewWidth;
 	private float NewHeight;
@@ -75,7 +85,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 
 	private void ChooseImage(int maxSize)
 	{
-		NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) =>
+        NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) =>
 		{
 			Debug.Log("Image path: " + path);
 			if (path != null)
@@ -94,6 +104,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 				
 				Utilities.SizeToParent(SelectedImage);
 
+				photoIsLoaded = true;
 			}
 		}, "Select a PNG image", "image/png");
 
@@ -120,6 +131,8 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 				ButtonsHolder.SetActive(false);
 
 				Utilities.SizeToParent(SelectedImage);
+
+				photoIsLoaded = true;
 			}
 		}, maxSize);
 
@@ -351,6 +364,22 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 				//DragItem.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
 			}
 		}
+
+
+		CustomizeButton.interactable = (photoIsLoaded);
+
+		
+        if(DistanceInput.text.Length > 0)
+        {
+			DistanceDisplay1.text = DistanceInput.text;
+        }
+        else
+        {
+			DistanceDisplay1.text = "Distance";
+		}
+        
+
+		//Debug.Log(DistanceInput.text);
 
 		//CalculateTotalSeconds();
 	}
