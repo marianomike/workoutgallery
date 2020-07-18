@@ -16,6 +16,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 	// variables used for progression
 	private bool photoIsLoaded = false;
 	private bool distanceIsEntered = false;
+	private float result = 0.0f;
 
     // store stats here
 	private float distance = 0;
@@ -368,8 +369,17 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 
 		CustomizeButton.interactable = (photoIsLoaded);
 
-		
-        if(DistanceInput.text.Length > 0)
+		if (float.TryParse(DistanceInput.text, out result))
+		{
+			DistanceDisplay1.text = DistanceInput.text;
+		}
+		else
+		{
+			DistanceDisplay1.text = "Distance";
+		}
+
+		/*
+        if(float.TryParse(DistanceInput.text, out result) > 0)
         {
 			DistanceDisplay1.text = DistanceInput.text;
         }
@@ -377,7 +387,9 @@ public class Setup : MonoBehaviour, IPointerDownHandler
         {
 			DistanceDisplay1.text = "Distance";
 		}
-        
+        */
+
+
 
 		//Debug.Log(DistanceInput.text);
 

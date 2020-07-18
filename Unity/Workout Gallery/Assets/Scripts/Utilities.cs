@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,11 +50,91 @@ public static class Utilities
         return miles;
     }
 
+    public static double ConvertMetersToMiles(float meters)
+    {
+        double miles;
+        miles = meters * 0.00062137119224;
+        float rounded = Mathf.Round((float)(miles * 100.0f)) / 100.0f;
+
+        return rounded;
+    }
+
+    public static double ConvertMetersToKilometers(float meters)
+    {
+        double kilometers;
+        kilometers = meters / 1000;
+        float rounded = Mathf.Round((float)(kilometers * 100.0f)) / 100.0f;
+
+        return rounded;
+    }
+
     public static string FormatTime(float time)
     {
         TimeSpan timeSpan = TimeSpan.FromSeconds(time);
         string timeText = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
 
+        // Remove extra zeroes
+        if (timeText.Substring(0, 2) == "00")
+        {
+            timeText = timeText.Substring(3);
+        }
+
+        if (timeText.Substring(0, 1) == "0")
+        {
+            timeText = timeText.Substring(1);
+        }
+
         return timeText;
+    }
+
+    public static string CalculatePace(float time, float distance)
+    {
+        //float timeInSeconds = float.Parse(ConvertSeconds(time));
+        float CalculatedPace = time / distance;
+
+
+        string pace = Utilities.FormatTime(CalculatedPace);
+        return pace;
+
+        /*
+        TotalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+        if (distance != 0)
+        {
+            float CalculatedPace = TotalSeconds / distance;
+
+            pace = Utilities.FormatTime(CalculatedPace);
+            PaceText.text = pace;
+        }
+        */
+    }
+
+    public static string ConvertSeconds(float time)
+    {
+        TimeSpan timeSpan = TimeSpan.FromSeconds(time);
+        string timeText = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+
+        return timeText;
+    }
+
+    public static string ConvertMetersToFeet(float time)
+    {
+        float CalculatedElevGain = (float)(time * 3.28084);
+        return Math.Round(CalculatedElevGain).ToString();
+    }
+
+    public static string ConvertDate(String date)
+    {
+        DateTime d2 = DateTime.Parse(date, null, System.Globalization.DateTimeStyles.RoundtripKind);
+
+        string dayOfWeek = d2.ToString("ddd", CultureInfo.InvariantCulture);
+        string month = d2.ToString("MMM", CultureInfo.InvariantCulture);
+        string day = d2.Day.ToString();
+        string year = d2.Year.ToString();
+
+        string formattedDate = dayOfWeek + "\n" + month + " " + day;
+
+        //return d2.ToString("MM/dd/yyyy");
+        return formattedDate;
     }
 }
