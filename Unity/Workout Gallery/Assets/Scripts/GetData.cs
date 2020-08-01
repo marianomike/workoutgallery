@@ -6,18 +6,26 @@ using System.Text;
 using System;
 using System.Linq;
 using SimpleJSON;
-using Boo.Lang;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 public class GetData : MonoBehaviour
 {
     public JSONNode jsonResult;
-    private List RunList;
+    private ArrayList RunList;
     private string measurement;
 
     public GameObject StatLayoutGroup;
 
-    private readonly string access_token = "30dc1ffc38c4400ff0ef9de347eeb096538b12f3";
+    private string runName;
+    private string runDate;
+    private string runDistance;
+    private string runTime;
+    private string runPace;
+    private string runElevation;
+
+    private readonly string access_token = "6bb385aa7ff8379c3b5fc9410fce86574e6231bb";
 
     //private string url = "https://www.strava.com/api/v3/activities/{id}?include_all_efforts";
     /*
@@ -117,17 +125,20 @@ public class GetData : MonoBehaviour
 
         int count = jsonResult.Children.Count();
 
-        RunList = new List();
+        RunList = new ArrayList();
 
         for (int i = 0; i < count; i++)
         {
-            // store data in list
+            // store string data in list
             if(jsonResult[i]["type"] == "Run" || jsonResult[i]["type"] == "Walk")
             {
-                RunStat newRunstat = new RunStat();
-                newRunstat.date = Utilities.ConvertDate(jsonResult[i]["start_date_local"]);
-                newRunstat.title = jsonResult[i]["name"];
+                RunStat newRunstat = new RunStat
+                {
+                    date = Utilities.ConvertDate(jsonResult[i]["start_date_local"]),
+                    title = jsonResult[i]["name"]
+                };
 
+                // check what measurement preference user has, then calculate based on that
                 float rawDistance;
                 if (measurement == "feet")
                 {
@@ -148,10 +159,12 @@ public class GetData : MonoBehaviour
                 RunList.Add(newRunstat);
             }
         }
+
+        // Now populate the UI
         PopulateRuns(RunList);
     }
 
-    private void PopulateRuns(List RunList)
+    private void PopulateRuns(ArrayList RunList)
     {
         for (int i = 0; i < RunList.Count; i++)
         {
@@ -167,11 +180,35 @@ public class GetData : MonoBehaviour
             newStat.transform.SetParent(StatLayoutGroup.transform, true);
             newStat.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
             newStat.GetComponent<RectTransform>().localPosition = new Vector3(0f, 0f, 0f);
+
+            newStat.GetComponent<StatTemplate>().button.onClick.AddListener(delegate { ClickRow(tempStat); });
         }
     }
 
+    private void ClickRow(RunStat stat)
+    {
+        // store the clicked run stats
+        runDate = stat.date;
+        runName = stat.title;
+        runDistance = stat.distance;
+        runTime = stat.time;
+        runPace = stat.pace;
+        runElevation = stat.elevgain;
+        Debug.Log(runName + " on " + runDate + ": " + runDistance + "/" + runTime + "/" + runPace + "/" + runElevation);
+    }
+
+    private void SetTempData()
+    {
+        runDate = "July 24";
+        runName = "Morning Run";
+        runDistance = "20.04";
+        runTime = "2:54:30";
+        runPace = "8:45/m";
+        runElevation = "350ft";
+    }
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         StartCoroutine(MakeRequest());
         //StartCoroutine(GetAccessToken());

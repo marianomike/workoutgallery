@@ -12,6 +12,8 @@ public class StatTemplate : MonoBehaviour
     public Text pace;
     public Text elevgain;
 
+    public Button button;
+
     // Start is called before the first frame update
     void Start()
     {
