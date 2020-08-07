@@ -9,6 +9,9 @@ using SimpleJSON;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using TMPro;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARFoundation.Samples;
 
 public class GetData : MonoBehaviour
 {
@@ -17,6 +20,11 @@ public class GetData : MonoBehaviour
     private string measurement;
 
     public GameObject StatLayoutGroup;
+    public PlaceOnPlane ARTextObject;
+    public GameObject RunListObject;
+    public Button RunButton;
+    private GameObject spawnedObject;
+    public ARPointCloudManager ARPointCloud;
 
     private string runName;
     private string runDate;
@@ -25,7 +33,9 @@ public class GetData : MonoBehaviour
     private string runPace;
     private string runElevation;
 
-    private readonly string access_token = "6bb385aa7ff8379c3b5fc9410fce86574e6231bb";
+    private bool useLocalData = false;
+
+    private readonly string access_token = "ea93c81fc8fa18250779bb494cebfc090388a48a";
 
     //private string url = "https://www.strava.com/api/v3/activities/{id}?include_all_efforts";
     /*
@@ -71,12 +81,40 @@ public class GetData : MonoBehaviour
         string rawJson = Encoding.Default.GetString(www.downloadHandler.data);
         jsonResult = JSON.Parse(rawJson);
 
-        Debug.Log(jsonResult["date_preference"]);
+        //Debug.Log(jsonResult["date_preference"]);
 
         // get measurement preference meters or feet
         measurement = jsonResult["measurement_preference"];
     }
 
+    private static IEnumerator GetAccessToken(Action<string> result)
+    {
+        Dictionary<string, string> content = new Dictionary<string, string>();
+        //Fill key and value
+        content.Add("grant_type", "client_credentials");
+        content.Add("client_id", "login-secret");
+        content.Add("client_secret", "secretpassword");
+
+        UnityWebRequest www = UnityWebRequest.Post("https://someurl.com//oauth/token", content);
+        //Send request
+        yield return www.Send();
+
+        if (!www.isError)
+        {
+            string resultContent = www.downloadHandler.text;
+            TokenClassName json = JsonUtility.FromJson<TokenClassName>(resultContent);
+
+            //Return result
+            result(json.access_token);
+        }
+        else
+        {
+            //Return null
+            result("");
+        }
+    }
+
+    /*
     IEnumerator GetAccessToken()
     {
         string url = "https://www.strava.com/oauth/authorize?";
@@ -102,6 +140,7 @@ public class GetData : MonoBehaviour
             Debug.Log(jsonResult);
         }
     }
+    */
 
     IEnumerator GetActivities()
     {
@@ -169,7 +208,7 @@ public class GetData : MonoBehaviour
         for (int i = 0; i < RunList.Count; i++)
         {
             RunStat tempStat = (RunStat)RunList[i];
-            GameObject newStat = Instantiate(Resources.Load("Prefabs/template_stat_row")) as GameObject;
+            GameObject newStat = Instantiate(Resources.Load("Prefabs/Templates/template_stat_row")) as GameObject;
             newStat.GetComponent<StatTemplate>().date.text = tempStat.date;
             newStat.GetComponent<StatTemplate>().title.text = tempStat.title;
             newStat.GetComponent<StatTemplate>().distance.text = tempStat.distance;
@@ -195,6 +234,19 @@ public class GetData : MonoBehaviour
         runPace = stat.pace;
         runElevation = stat.elevgain;
         Debug.Log(runName + " on " + runDate + ": " + runDistance + "/" + runTime + "/" + runPace + "/" + runElevation);
+
+        spawnedObject = GameObject.Find("spawnedObject");
+
+        if (spawnedObject != null)
+        {
+            spawnedObject.GetComponent<TextMeshPro>().text = runDistance + "\nmiles" + "\n" + runTime + "\n" + runPace;
+        }
+        else
+        {
+            ARTextObject.placedPrefab.GetComponent<TextMeshPro>().text = runDistance + "\nmiles" + "\n" + runTime + "\n" + runPace;
+        }
+
+        RunListObject.SetActive(false);
     }
 
     private void SetTempData()
@@ -205,14 +257,35 @@ public class GetData : MonoBehaviour
         runTime = "2:54:30";
         runPace = "8:45/m";
         runElevation = "350ft";
+        ARTextObject.placedPrefab.GetComponent<TextMeshPro>().text = runDistance + "\nmiles" + "\n" + runTime + "\n" + runPace;
+    }
+
+    private void ShowRuns()
+    {
+        RunListObject.SetActive(true);
     }
 
     // Start is called before the first frame update
     void Awake()
     {
-        StartCoroutine(MakeRequest());
-        //StartCoroutine(GetAccessToken());
-        StartCoroutine(GetActivities());
+
+        if (!useLocalData)
+        {
+            StartCoroutine(MakeRequest());
+            //StartCoroutine(GetAccessToken());
+            StartCoroutine(GetActivities());
+            RunButton.onClick.AddListener(ShowRuns);
+            RunListObject.SetActive(true);
+            RunButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            RunButton.gameObject.SetActive(false);
+            RunListObject.SetActive(false);
+            SetTempData();
+        }
+        
+        ARPointCloud.enabled = false;
     }
 
     // Update is called once per frame

@@ -15,7 +15,7 @@ public class Setup : MonoBehaviour, IPointerDownHandler
 {
 	// variables used for progression
 	private bool photoIsLoaded = false;
-	private bool distanceIsEntered = false;
+	//private bool distanceIsEntered = false;
 	private float result = 0.0f;
 
     // store stats here
