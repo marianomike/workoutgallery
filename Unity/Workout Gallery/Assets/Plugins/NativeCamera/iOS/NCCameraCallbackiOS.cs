@@ -1,4 +1,4 @@
-﻿#if !UNITY_EDITOR && UNITY_IOS
+﻿#if UNITY_EDITOR || UNITY_IOS
 using UnityEngine;
 
 namespace NativeCameraNamespace
@@ -43,12 +43,12 @@ namespace NativeCameraNamespace
 					if( _NativeCamera_IsCameraBusy() == 0 )
 					{
 						IsBusy = false;
-						
-						if( callback != null )
-						{
-							callback( null );
-							callback = null;
-						}
+
+						NativeCamera.CameraCallback _callback = callback;
+						callback = null;
+
+						if( _callback != null )
+							_callback( null );
 					}
 				}
 			}
@@ -61,11 +61,11 @@ namespace NativeCameraNamespace
 			if( string.IsNullOrEmpty( path ) )
 				path = null;
 
-			if( callback != null )
-			{
-				callback( path );
-				callback = null;
-			}
+			NativeCamera.CameraCallback _callback = callback;
+			callback = null;
+
+			if( _callback != null )
+				_callback( path );
 		}
 	}
 }

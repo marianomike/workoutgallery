@@ -50,11 +50,17 @@ public static class Utilities
         return miles;
     }
 
+    /*
+    export const getMilesFromMeters = (meters) => {
+    return Math.floor((meters * 0.00062137119224) * 100) / 100;
+    }
+    */
+
     public static double ConvertMetersToMiles(float meters)
     {
         double miles;
         miles = meters * 0.00062137119224;
-        float rounded = Mathf.Round((float)(miles * 100.0f)) / 100.0f;
+        float rounded = Mathf.Floor((float)(miles * 100.0f)) / 100.0f;
 
         return rounded;
     }
@@ -107,9 +113,9 @@ public static class Utilities
             PaceText.text = pace;
         }
         */
-    }
+}
 
-    public static string ConvertSeconds(float time)
+public static string ConvertSeconds(float time)
     {
         TimeSpan timeSpan = TimeSpan.FromSeconds(time);
         string timeText = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6653807490482507799}
   m_Layer: 0
   m_Name: AR Text Mesh
-  m_TagString: Untagged
+  m_TagString: Spawnable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,6 +48,7 @@ MeshRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -98,7 +99,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 13.1
+  m_text: '3
+
+    miles
+
+    32:18
+
+    10:46/m'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 75f5526b3787044b88c4c79d4133587e, type: 2}
   m_sharedMaterial: {fileID: -1442908247853229107, guid: 75f5526b3787044b88c4c79d4133587e,
@@ -165,8 +172,9 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1612936188471369201}
   m_maskType: 0
-  _SortingLayerID: 0
-  _SortingOrder: 0

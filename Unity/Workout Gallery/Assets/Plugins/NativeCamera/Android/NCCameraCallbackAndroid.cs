@@ -1,4 +1,4 @@
-﻿#if !UNITY_EDITOR && UNITY_ANDROID
+﻿#if UNITY_EDITOR || UNITY_ANDROID
 using UnityEngine;
 
 namespace NativeCameraNamespace
@@ -31,7 +31,7 @@ namespace NativeCameraNamespace
 			}
 			finally
 			{
-				Object.Destroy( callbackHelper );
+				Object.Destroy( callbackHelper.gameObject );
 			}
 		}
 	}

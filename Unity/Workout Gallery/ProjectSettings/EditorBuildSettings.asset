@@ -11,19 +11,24 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Select.unity
     guid: 6b576ef2ff9ea406797e43f75c667eb0
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SimpleAR/SimpleAR.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Interaction/Interaction.unity
     guid: ff9b6e62e970e432a9e8d51604b3bad8
   - enabled: 0
     path: Assets/Scenes/Scale.unity
     guid: 9d3f0f95cb70f4e8aba8f2cb9ef6e1cd
+  - enabled: 0
+    path: Assets/Scenes/ARTest.unity
+    guid: 55158e3bb071b402bb83d63ab4020be6
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 956a82a89f5d3490094a363c26d402f0,
       type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 0664c7124efc5493884e1c2c45797945,
+      type: 2}
+    com.unity.input.settings: {fileID: 11400000, guid: 0b54508fc10d943c7b1d2e41ca7c48ff,
       type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 36f09f514d1c44f0db76439b08e127ad,
       type: 2}
