@@ -35,7 +35,7 @@ public class GetData : MonoBehaviour
 
     private bool useLocalData = false;
 
-    private readonly string access_token = "0065b081c9f142cb73a1c2437b2d94b9ea1de373";
+    private readonly string access_token = "a443dcff4ceb8fd7f9cc98d3f7d5572b019c3660";
 
     //private string url = "https://www.strava.com/api/v3/activities/{id}?include_all_efforts";
     /*
