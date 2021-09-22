@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Select.unity
     guid: 6b576ef2ff9ea406797e43f75c667eb0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SimpleAR/SimpleAR.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 0
@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ARTest.unity
     guid: 55158e3bb071b402bb83d63ab4020be6
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: f19b13bf367524d04a9c7f676c926a47
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 956a82a89f5d3490094a363c26d402f0,
       type: 2}

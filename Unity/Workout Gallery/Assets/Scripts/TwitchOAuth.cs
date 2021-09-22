@@ -1,16 +1,4 @@
-﻿/*
- * Simple Twitch OAuth flow example
- * by HELLCAT
- *
- * At first glance, this looks like more than it actually is.
- * It's really no rocket science, promised! ;-)
- * And for any further questions contact me directly or on the Twitch-Developers discord.
- *
- * 🐦 https://twitter.com/therealhellcat
- * 📺 https://www.twitch.tv/therealhellcat
- */
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -20,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using SimpleJSON;
 using UnityEngine.UI;
+using System.Linq;
 
 public class TwitchOAuth : MonoBehaviour
 {
@@ -30,14 +19,32 @@ public class TwitchOAuth : MonoBehaviour
     [SerializeField] private TwitchApiCallHelper twitchApiCallHelper = null;
     [SerializeField] private TextMeshProUGUI uiTextToken = null;
     [SerializeField] private Button RunButton = null;
+    [SerializeField] private Button LoginButton = null;
+    [SerializeField] private Image Loader = null;
+
     private string _twitchAuthStateVerify;
     private string _authToken;
     private JSONNode jsonResult;
+    private ArrayList RunList;
+    private string measurement = "feet"; //fix me later
+
+    public GameObject StatLayoutGroup;
+    public GameObject RunListObject;
+
+    private string runName;
+    private string runDate;
+    private string runDistance;
+    private string runTime;
+    private string runPace;
+    private string runElevation;
 
     private void Start()
     {
         _authToken = "";
         RunButton.gameObject.SetActive(false);
+        LoginButton.gameObject.SetActive(true);
+        Loader.gameObject.SetActive(false);
+        RunListObject.SetActive(false);
         RunButton.onClick.AddListener(delegate { StartCoroutine(GetActivities()); });
         UpdateTokenDisplay();
         StartCoroutine(DisplayUpdater());
@@ -48,6 +55,7 @@ public class TwitchOAuth : MonoBehaviour
         if(_authToken != "")
         {
             RunButton.gameObject.SetActive(true);
+            LoginButton.gameObject.SetActive(false);
         }
     }
 
@@ -66,11 +74,6 @@ public class TwitchOAuth : MonoBehaviour
             "profile:read_all",
             "activity:read_all"
         };
-
-        // generate something for the "state" parameter.
-        // this can be whatever you want it to be, it's gonna be "echoed back" to us as is and should be used to
-        // verify the redirect back from Twitch is valid.
-        _twitchAuthStateVerify = ((Int64) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
 
         // query parameters for the Twitch auth URL
         s = "client_id=" + twitchClientId + "&" +
@@ -129,7 +132,6 @@ public class TwitchOAuth : MonoBehaviour
         httpRequest = httpContext.Request;
 
         code = httpRequest.QueryString.Get("code");
-        state = httpRequest.QueryString.Get("state");
         //Debug.Log(code);
 
         // check that we got a code value and the state value matches our remembered one
@@ -183,12 +185,12 @@ public class TwitchOAuth : MonoBehaviour
 
         // fetch the token from the response data
         _authToken = apiResponseData.access_token;
-
-        //StartCoroutine(GetActivities());
     }
 
     IEnumerator GetActivities()
     {
+        Loader.gameObject.SetActive(true);
+
         string url = "https://www.strava.com/api/v3/athlete/activities?access_token=" + _authToken;
 
         UnityWebRequest www = UnityWebRequest.Get(url);
@@ -198,7 +200,9 @@ public class TwitchOAuth : MonoBehaviour
         string rawJson = Encoding.Default.GetString(www.downloadHandler.data);
         jsonResult = JSON.Parse(rawJson);
 
-        if (www.isNetworkError || www.isHttpError)
+        //CS0618: 'UnityWebRequest.isNetworkError' is obsolete: 'UnityWebRequest.isNetworkError is deprecated. Use (UnityWebRequest.result == UnityWebRequest.Result.ConnectionError) instead.'
+        //CS0618: 'UnityWebRequest.isHttpError' is obsolete: 'UnityWebRequest.isHttpError is deprecated. Use (UnityWebRequest.result == UnityWebRequest.Result.ProtocolError) instead.'
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.Log(www.error);
         }
@@ -206,6 +210,69 @@ public class TwitchOAuth : MonoBehaviour
         {
             Debug.Log(jsonResult);
         }
+
+        int count = jsonResult.Children.Count();
+
+        RunList = new ArrayList();
+
+        for (int i = 0; i < count; i++)
+        {
+            // store string data in list
+            if (jsonResult[i]["type"] == "Run" || jsonResult[i]["type"] == "Walk")
+            {
+                RunStat newRunstat = new RunStat
+                {
+                    date = Utilities.ConvertDate(jsonResult[i]["start_date_local"]),
+                    title = jsonResult[i]["name"]
+                };
+
+                // check what measurement preference user has, then calculate based on that
+                float rawDistance;
+                if (measurement == "feet")
+                {
+                    rawDistance = (float)Utilities.ConvertMetersToMiles(jsonResult[i]["distance"]);
+                    newRunstat.distance = rawDistance.ToString();
+                    newRunstat.pace = Utilities.CalculatePace(jsonResult[i]["moving_time"], rawDistance) + "/m";
+                    newRunstat.elevgain = Utilities.ConvertMetersToFeet(jsonResult[i]["total_elevation_gain"]) + " ft";
+                }
+                else
+                {
+                    rawDistance = (float)Utilities.ConvertMetersToKilometers(jsonResult[i]["distance"]);
+                    newRunstat.distance = rawDistance.ToString();
+                    newRunstat.pace = Utilities.CalculatePace(jsonResult[i]["moving_time"], rawDistance) + "/km";
+                    newRunstat.elevgain = jsonResult[i]["total_elevation_gain"] + " m";
+                }
+
+                newRunstat.time = Utilities.FormatTime(jsonResult[i]["moving_time"]);
+                RunList.Add(newRunstat);
+            }
+        }
+
+        // Now populate the UI
+        PopulateRuns(RunList);
+    }
+
+    private void PopulateRuns(ArrayList RunList)
+    {
+        for (int i = 0; i < RunList.Count; i++)
+        {
+            RunStat tempStat = (RunStat)RunList[i];
+            GameObject newStat = Instantiate(Resources.Load("Prefabs/Templates/template_stat_row")) as GameObject;
+            newStat.GetComponent<StatTemplate>().date.text = tempStat.date;
+            newStat.GetComponent<StatTemplate>().title.text = tempStat.title;
+            newStat.GetComponent<StatTemplate>().distance.text = tempStat.distance;
+            newStat.GetComponent<StatTemplate>().time.text = tempStat.time;
+            newStat.GetComponent<StatTemplate>().pace.text = tempStat.pace;
+            newStat.GetComponent<StatTemplate>().elevgain.text = tempStat.elevgain;
+
+            newStat.transform.SetParent(StatLayoutGroup.transform, true);
+            newStat.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+            newStat.GetComponent<RectTransform>().localPosition = new Vector3(0f, 0f, 0f);
+
+            //newStat.GetComponent<StatTemplate>().button.onClick.AddListener(delegate { ClickRow(tempStat); });
+        }
+        RunListObject.SetActive(true);
+        Loader.gameObject.SetActive(false);
     }
 
     /// <summary>

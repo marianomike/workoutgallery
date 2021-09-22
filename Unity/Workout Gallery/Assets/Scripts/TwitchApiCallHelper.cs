@@ -1,12 +1,4 @@
-﻿/*
- * Simple Twitch OAuth flow example
- * by HELLCAT
- *
- * 🐦 https://twitter.com/therealhellcat
- * 📺 https://www.twitch.tv/therealhellcat
- */
-
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
