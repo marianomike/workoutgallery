@@ -18,9 +18,19 @@ public class TwitchOAuth : MonoBehaviour
     [SerializeField] private string twitchRedirectUrl = "http://localhost:8080/";
     [SerializeField] private TwitchApiCallHelper twitchApiCallHelper = null;
     [SerializeField] private TextMeshProUGUI uiTextToken = null;
+
     [SerializeField] private Button RunButton = null;
     [SerializeField] private Button LoginButton = null;
+    [SerializeField] private Button ViewAllRunsButton = null;
+
     [SerializeField] private Image Loader = null;
+
+    [SerializeField] private GameObject RunDetails = null;
+    [SerializeField] private Text RunDateText = null;
+    [SerializeField] private Text RunDistanceText = null;
+    [SerializeField] private Text RunTimeText = null;
+    [SerializeField] private Text RunPaceText = null;
+    [SerializeField] private Text RunElevGainText = null;
 
     private string _twitchAuthStateVerify;
     private string _authToken;
@@ -45,7 +55,9 @@ public class TwitchOAuth : MonoBehaviour
         LoginButton.gameObject.SetActive(true);
         Loader.gameObject.SetActive(false);
         RunListObject.SetActive(false);
+        RunDetails.SetActive(false);
         RunButton.onClick.AddListener(delegate { StartCoroutine(GetActivities()); });
+        ViewAllRunsButton.onClick.AddListener(ShowRuns);
         UpdateTokenDisplay();
         StartCoroutine(DisplayUpdater());
     }
@@ -232,8 +244,8 @@ public class TwitchOAuth : MonoBehaviour
                 {
                     rawDistance = (float)Utilities.ConvertMetersToMiles(jsonResult[i]["distance"]);
                     newRunstat.distance = rawDistance.ToString();
-                    newRunstat.pace = Utilities.CalculatePace(jsonResult[i]["moving_time"], rawDistance) + "/m";
-                    newRunstat.elevgain = Utilities.ConvertMetersToFeet(jsonResult[i]["total_elevation_gain"]) + " ft";
+                    newRunstat.pace = Utilities.CalculatePace(jsonResult[i]["moving_time"], rawDistance);
+                    newRunstat.elevgain = Utilities.ConvertMetersToFeet(jsonResult[i]["total_elevation_gain"]);
                 }
                 else
                 {
@@ -260,19 +272,45 @@ public class TwitchOAuth : MonoBehaviour
             GameObject newStat = Instantiate(Resources.Load("Prefabs/Templates/template_stat_row")) as GameObject;
             newStat.GetComponent<StatTemplate>().date.text = tempStat.date;
             newStat.GetComponent<StatTemplate>().title.text = tempStat.title;
-            newStat.GetComponent<StatTemplate>().distance.text = tempStat.distance;
+            newStat.GetComponent<StatTemplate>().distance.text = tempStat.distance + " miles";
             newStat.GetComponent<StatTemplate>().time.text = tempStat.time;
-            newStat.GetComponent<StatTemplate>().pace.text = tempStat.pace;
-            newStat.GetComponent<StatTemplate>().elevgain.text = tempStat.elevgain;
+            newStat.GetComponent<StatTemplate>().pace.text = tempStat.pace + "/m";
+            newStat.GetComponent<StatTemplate>().elevgain.text = tempStat.elevgain + " ft";
 
             newStat.transform.SetParent(StatLayoutGroup.transform, true);
             newStat.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
             newStat.GetComponent<RectTransform>().localPosition = new Vector3(0f, 0f, 0f);
 
-            //newStat.GetComponent<StatTemplate>().button.onClick.AddListener(delegate { ClickRow(tempStat); });
+            newStat.GetComponent<StatTemplate>().button.onClick.AddListener(delegate { ClickRow(tempStat); });
         }
         RunListObject.SetActive(true);
         Loader.gameObject.SetActive(false);
+    }
+
+    private void ClickRow(RunStat stat)
+    {
+        // store the clicked run stats
+        runDate = stat.date;
+        runName = stat.title;
+        runDistance = stat.distance;
+        runTime = stat.time;
+        runPace = stat.pace;
+        runElevation = stat.elevgain;
+
+        RunDateText.text = runDate;
+        RunDistanceText.text = runDistance;
+        RunTimeText.text = runTime;
+        RunPaceText.text = runPace;
+        RunElevGainText.text = runElevation;
+
+        RunListObject.SetActive(false);
+        RunDetails.SetActive(true);
+    }
+
+    private void ShowRuns()
+    {
+        RunListObject.SetActive(true);
+        RunDetails.SetActive(false);
     }
 
     /// <summary>

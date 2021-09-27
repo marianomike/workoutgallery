@@ -401,7 +401,12 @@ PrefabInstance:
     - target: {fileID: 361653332936233042, guid: 9087bf6128e754f1e89415302397a932,
         type: 3}
       propertyPath: m_Text
-      value: Date
+      value: DATE
+      objectReference: {fileID: 0}
+    - target: {fileID: 765270925202536352, guid: 9087bf6128e754f1e89415302397a932,
+        type: 3}
+      propertyPath: m_Text
+      value: TIME
       objectReference: {fileID: 0}
     - target: {fileID: 765270925202536353, guid: 9087bf6128e754f1e89415302397a932,
         type: 3}
@@ -432,6 +437,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 765270925838834216, guid: 9087bf6128e754f1e89415302397a932,
+        type: 3}
+      propertyPath: m_Text
+      value: DISTANCE
       objectReference: {fileID: 0}
     - target: {fileID: 765270925838834217, guid: 9087bf6128e754f1e89415302397a932,
         type: 3}
@@ -691,7 +701,7 @@ PrefabInstance:
     - target: {fileID: 8098366698438502408, guid: 9087bf6128e754f1e89415302397a932,
         type: 3}
       propertyPath: m_Text
-      value: Name
+      value: NAME
       objectReference: {fileID: 0}
     - target: {fileID: 8181522574954144045, guid: 9087bf6128e754f1e89415302397a932,
         type: 3}
@@ -726,7 +736,7 @@ PrefabInstance:
     - target: {fileID: 8632632458014093626, guid: 9087bf6128e754f1e89415302397a932,
         type: 3}
       propertyPath: m_Text
-      value: elev Gain
+      value: ELEV. GAIN
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9087bf6128e754f1e89415302397a932, type: 3}

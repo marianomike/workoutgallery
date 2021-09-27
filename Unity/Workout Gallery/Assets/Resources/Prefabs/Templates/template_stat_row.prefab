@@ -66,8 +66,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: ed37eb77de8a3474383d16d6994c7da5, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 869ffd2f2a44a4924a6db1b502352724, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -77,8 +77,8 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Morning run
+    m_LineSpacing: 0.65
+  m_Text: Name
 --- !u!1 &286907797289978967
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,8 +146,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: ed37eb77de8a3474383d16d6994c7da5, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 869ffd2f2a44a4924a6db1b502352724, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -248,8 +248,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: ed37eb77de8a3474383d16d6994c7da5, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 869ffd2f2a44a4924a6db1b502352724, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -348,8 +348,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: ed37eb77de8a3474383d16d6994c7da5, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 869ffd2f2a44a4924a6db1b502352724, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -642,8 +642,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: ed37eb77de8a3474383d16d6994c7da5, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 869ffd2f2a44a4924a6db1b502352724, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -653,10 +653,8 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: 'MONTH
-
-    day'
+    m_LineSpacing: 0.65
+  m_Text: Date
 --- !u!114 &8220806503819697085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,7 +671,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: 80
-  m_PreferredHeight: 42
+  m_PreferredHeight: 60
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -729,8 +727,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 160
-  m_PreferredHeight: 42
+  m_PreferredWidth: 230
+  m_PreferredHeight: 60
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -801,8 +799,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: ed37eb77de8a3474383d16d6994c7da5, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 869ffd2f2a44a4924a6db1b502352724, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -829,7 +827,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 100
+  m_PreferredWidth: 120
   m_PreferredHeight: 42
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
