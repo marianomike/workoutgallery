@@ -3227,6 +3227,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ui_runlist
       objectReference: {fileID: 0}
+    - target: {fileID: 3461201648192488414, guid: 92cdce23d48ef48af9600ea2b74b2943,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3461201648192488415, guid: 92cdce23d48ef48af9600ea2b74b2943,
         type: 3}
       propertyPath: m_Pivot.x
